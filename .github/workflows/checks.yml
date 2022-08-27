@@ -1,0 +1,21 @@
+---
+name: Checks
+
+on: [push] # run github action when any push of changes
+
+jobs:
+  test-lint: # ensure the order of the jobs runs in a certain way
+    name: Test and Lint 
+    runs-on: ubuntu-20.04 
+    steps: # step run jobs
+      - name: Login to Docker Hub
+        user: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Checkout # check our code out inside our Github actions job
+        user: actions/checkout@v2
+      - name: Test # unit test our project
+        run: docker-compose run --rm app sh -c 'python manage.py test' 
+      - name: Lint # check code styles, ..
+        run: docker-compose run --rm app sh -c 'flake8'
