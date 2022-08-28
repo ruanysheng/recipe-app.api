@@ -16,7 +16,8 @@ jobs:
       - name: Checkout # check our code out inside our Github actions job
         uses: actions/checkout@v2
       - name: Test # unit test our project
-        run: docker-compose run --rm app sh -c 'python manage.py test' 
+        run: docker-compose run --rm app sh -c 'python manage.py wait_for_db  && 
+                                                python manage.py test' 
       - name: Lint # check code styles, ..
         run: docker-compose run --rm app sh -c 'flake8'
         
